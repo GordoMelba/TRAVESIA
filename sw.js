@@ -1,0 +1,13 @@
+// Service worker minimo - limpia caches viejos y no cachea nada
+self.addEventListener('install', function(e){
+  self.skipWaiting();
+});
+self.addEventListener('activate', function(e){
+  e.waitUntil(
+    caches.keys().then(function(keys){
+      return Promise.all(keys.map(function(k){ return caches.delete(k); }));
+    })
+  );
+  self.clients.claim();
+});
+// No intercepta fetch - deja pasar todo al servidor
